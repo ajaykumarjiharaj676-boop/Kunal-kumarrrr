@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Subtle glow ring -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity="0.3" stroke-dasharray="12 12" />
+
+  <!-- Shopping Bag Group -->
+  <g filter="url(#shadow)">
+    <!-- Bag Handle -->
+    <path d="M 196 160 C 196 110, 316 110, 316 160" fill="none" stroke="#fbbf24" stroke-width="20" stroke-linecap="round" />
+    
+    <!-- Bag Body -->
+    <path d="M 136 170 L 376 170 L 356 390 C 354 406, 342 418, 326 418 L 186 418 C 170 418, 158 406, 156 390 Z" fill="#ffffff" />
+    
+    <!-- Bag Fold Highlight -->
+    <path d="M 136 170 L 186 418" stroke="#e2e8f0" stroke-width="2" />
+    <path d="M 376 170 L 326 418" stroke="#e2e8f0" stroke-width="2" />
+    
+    <!-- Sale / Discount Tag Badge on Bag -->
+    <circle cx="256" cy="290" r="62" fill="url(#badgeGrad)" />
+    
+    <!-- Percentage Symbol % & Deals Star -->
+    <text x="256" y="306" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="900" fill="#ffffff" text-anchor="middle">%</text>
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M 120 110 L 126 126 L 142 132 L 126 138 L 120 154 L 114 138 L 98 132 L 114 126 Z" fill="#fbbf24" />
+  <path d="M 390 100 L 394 112 L 406 116 L 394 120 L 390 132 L 386 120 L 374 116 L 386 112 Z" fill="#fbbf24" />
+</svg>

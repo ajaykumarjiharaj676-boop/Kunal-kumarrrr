@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal - AffiliateMart Enterprise</title>
+    <meta name="description" content="Production-ready affiliate platform dashboard: catalog management, click tracking, sales reconciliation, and audit logs." />
+    
+    <!-- PWA & Mobile Web App Meta Tags -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AffilMart Admin" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #f1f5f9;
+        padding-bottom: 0 !important;
+      }
+      .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.725rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .badge-soft-pending { background: #fef3c7; color: #b45309; }
+      .badge-soft-confirmed { background: #dcfce7; color: #15803d; }
+      .badge-soft-cancelled { background: #fee2e2; color: #b91c1c; }
+      .badge-soft-paid { background: #e0e7ff; color: #4338ca; }
+      .badge-soft-reversed { background: #f1f5f9; color: #475569; }
+    </style>
+  </head>
+  <body>
+    <!-- AUTHENTICATION VIEW -->
+    <div id="admin-login-view" style="display: none; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+      <div style="background: white; border: 1px solid var(--border-light); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); max-width: 440px; width: 100%; padding: 36px 32px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <div style="width: 52px; height: 52px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <h2 style="font-size: 1.45rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">AffiliateMart Admin</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Secure Management & Sales Reconciliation Console</p>
+        </div>
+
+        <!-- Firebase Authentication Credentials Callout Box -->
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--primary); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-weight: 800; font-size: 0.88rem; color: #1e40af; display: flex; align-items: center; gap: 6px;">
+              <span>🔥 Firebase Authentication Active</span>
+            </div>
+            <button type="button" id="autofill-credentials-btn" class="badge-soft" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; cursor: pointer; padding: 3px 8px; font-weight: 700;" title="Fill authorized admin email">
+              ⚡ 1-Click Fill
+            </button>
+          </div>
+          <div style="font-size: 0.825rem; color: #1e3a8a; background: white; padding: 10px 12px; border-radius: 6px; border: 1px solid #dbeafe; line-height: 1.5;">
+            <div>Authorized Admin Email: <strong style="color: #0f172a; font-family: monospace;">anilkumarjiha123@gmail.com</strong></div>
+            <div style="font-size: 0.73rem; color: #64748b; margin-top: 3px;">Project: <span style="font-family: monospace; color: #2563eb;">kunal-a9793</span> (Secured with signInWithEmailAndPassword)</div>
+          </div>
+        </div>
+
+        <form id="admin-login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-username">Authorized Admin Email <span class="required">*</span></label>
+            <input type="email" id="login-username" class="form-control" value="anilkumarjiha123@gmail.com" required autocomplete="email" placeholder="anilkumarjiha123@gmail.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Firebase Password <span class="required">*</span></label>
+            <div style="position: relative;">
+              <input type="password" id="login-password" class="form-control" value="" required autocomplete="current-password" placeholder="Enter your Firebase password" style="padding-right: 40px;" />
+              <button type="button" id="toggle-login-password-btn" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748b; cursor: pointer; padding: 4px;" aria-label="Toggle password visibility" title="Show/Hide Password">
+                <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="login-submit-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 11px; font-size: 0.95rem; margin-top: 10px;">
+            <span>Sign In with Firebase</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+        </form>
+
+        <div style="margin-top: 14px; text-align: center;">
+          <button type="button" id="reset-credentials-quick-btn" style="background: none; border: none; font-size: 0.78rem; color: #2563eb; cursor: pointer; text-decoration: underline;">
+            पासवर्ड रीसेट लिंक भेजें (Send Firebase Password Reset Email)
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="./index.html" style="font-size: 0.85rem; color: var(--primary); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+            <span>Back to Shopping Website</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN ADMIN DASHBOARD INTERFACE -->
+    <div id="admin-dashboard-view" class="admin-layout" style="display: none;">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="admin-sidebar-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="brand-icon-box" style="width: 32px; height: 32px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2Z"/><path d="M3 6h18"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 0.95rem; color: white;">AffiliateMart</div>
+              <div style="font-size: 0.68rem; color: #94a3b8;">Enterprise Console</div>
+            </div>
+          </div>
+          <button id="admin-sidebar-close" class="d-md-none" style="color: #94a3b8; padding: 4px;" aria-label="Close sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+
+        <nav class="admin-nav">
+          <button class="admin-nav-item active" data-tab="overview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+            </svg>
+            <span>Executive Overview</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="products">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+            </svg>
+            <span>Product Catalog</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="archive">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="21 8 21 21 3 21 3 8"/><rect width="22" height="5" x="1" y="3" rx="1"/><line x1="10" x2="14" y1="12" y2="12"/>
+            </svg>
+            <span>Recycle Bin / Archive</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="tracking">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 3 7 18 3-7 7-3Z"/><path d="m13 13 8 8"/>
+            </svg>
+            <span>Click Analytics & Logs</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="sales">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            <span>Sales & Commissions</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="audit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>Audit Trail Logs</span>
+          </button>
+
+          <button class="admin-nav-item" data-tab="settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings & Backup</span>
+          </button>
+        </nav>
+
+        <div class="admin-sidebar-footer">
+          <a href="./index.html" target="_blank" class="admin-nav-item" style="color: #60a5fa; margin-bottom: 6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span>Open Storefront</span>
+          </a>
+
+          <button id="admin-logout-btn" class="admin-nav-item" style="width: 100%; color: #f87171;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Dashboard Content -->
+      <main class="admin-main">
+        <!-- Topbar -->
+        <header class="admin-topbar">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="admin-mobile-menu-btn" class="header-btn" style="padding: 6px 10px;" aria-label="Toggle menu">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+              </svg>
+            </button>
+            <h1 id="admin-tab-title" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Executive Overview</h1>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="./index.html" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              <span>View Storefront</span>
+            </a>
+            <button id="quick-add-prod-btn" class="btn-primary" style="font-size: 0.8rem; padding: 7px 14px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M12 5v14"/><path d="M5 12h14"/>
+              </svg>
+              <span>Add Product</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="admin-content">
+          <!-- TAB 1: OVERVIEW -->
+          <div id="tab-overview" class="tab-pane active">
+            <!-- Key Metric Cards -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-info">
+                  <h4>Active Catalog</h4>
+                  <div class="stat-number" id="stat-active-products">0</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Total live affiliate products</div>
+                </div>
+                <div class="stat-icon-box" style="background: #eff6ff; color: var(--primary);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-info">
+                  <h4>Total Outbound Clicks</h4>
+                  <div class="stat-number" id="stat-total-clicks">0</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Referrals to Amazon, Flipkart, etc.</div>
+                </div>
+                <div class="stat-icon-box" style="background: #ecfdf5; color: #10b981;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 3 7 18 3-7 7-3Z"/><path d="m13 13 8 8"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-info">
+                  <h4>Verified Commission</h4>
+                  <div class="stat-number" id="stat-confirmed-commission">₹0</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Confirmed + Paid earnings</div>
+                </div>
+                <div class="stat-icon-box" style="background: #f5f3ff; color: var(--secondary);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-info">
+                  <h4>Pending Settlements</h4>
+                  <div class="stat-number" id="stat-pending-commission">₹0</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Awaiting merchant lock-in</div>
+                </div>
+                <div class="stat-icon-box" style="background: #fffbeb; color: #f59e0b;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Platform-Wise Breakdown -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px;">Platform-Wise Catalog & Referral Distribution</h3>
+              <div class="platform-stats-grid" id="platform-counts-container"></div>
+            </div>
+
+            <!-- Recent Activity Split Grid -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;" class="form-row-2">
+              <!-- Recent Outbound Clicks -->
+              <div class="table-card">
+                <div class="table-header-toolbar">
+                  <h3 style="font-size: 0.95rem; font-weight: 700;">Latest Outbound Clicks</h3>
+                  <button class="btn-secondary" id="overview-view-clicks-btn" style="font-size: 0.75rem; padding: 4px 10px;">
+                    View All Clicks →
+                  </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table" style="font-size: 0.8rem;">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Store</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overview-recent-clicks-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Recent Verified Commission Orders -->
+              <div class="table-card">
+                <div class="table-header-toolbar">
+                  <h3 style="font-size: 0.95rem; font-weight: 700;">Recent Verified Affiliate Orders</h3>
+                  <button class="btn-secondary" id="overview-view-sales-btn" style="font-size: 0.75rem; padding: 4px 10px;">
+                    View Ledger →
+                  </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table" style="font-size: 0.8rem;">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Store</th>
+                        <th>Commission</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overview-recent-sales-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: PRODUCTS CATALOG (With Pagination & Soft-Delete) -->
+          <div id="tab-products" class="tab-pane" style="display: none;">
+            <div class="table-card">
+              <div class="table-header-toolbar">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; flex: 1;">
+                  <div style="position: relative; max-width: 260px; width: 100%;">
+                    <input 
+                      type="text" 
+                      id="admin-search-input" 
+                      class="form-control" 
+                      placeholder="Search title, category..." 
+                      style="padding-left: 32px; font-size: 0.85rem;" 
+                    />
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 11px; color: var(--text-muted); pointer-events: none;">
+                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                    </svg>
+                  </div>
+
+                  <select id="admin-platform-filter" class="form-control" style="max-width: 140px; font-size: 0.85rem;">
+                    <option value="All">All Platforms</option>
+                    <option value="Amazon">Amazon</option>
+                    <option value="Flipkart">Flipkart</option>
+                    <option value="Meesho">Meesho</option>
+                    <option value="Myntra">Myntra</option>
+                    <option value="Other">Other</option>
+                  </select>
+
+                  <select id="admin-category-filter" class="form-control" style="max-width: 150px; font-size: 0.85rem;">
+                    <option value="All">All Categories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home">Home</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Other">Other</option>
+                  </select>
+
+                  <select id="admin-status-filter" class="form-control" style="max-width: 130px; font-size: 0.85rem;">
+                    <option value="All">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="hidden">Hidden</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button id="admin-export-products-csv-btn" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 12px;" title="Export products to CSV">
+                    <span>Export CSV</span>
+                  </button>
+                  <button id="admin-add-product-btn" class="btn-primary" style="font-size: 0.85rem; padding: 8px 14px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M12 5v14"/><path d="M5 12h14"/>
+                    </svg>
+                    <span>Add New Deal</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Platform</th>
+                      <th>Category</th>
+                      <th>Selling Price</th>
+                      <th>MRP / Off</th>
+                      <th>Affiliate URL</th>
+                      <th>Status</th>
+                      <th>📌 Pinned (Top)</th>
+                      <th>Featured</th>
+                      <th style="text-align: right;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-products-tbody"></tbody>
+                </table>
+              </div>
+
+              <!-- Admin Table Pagination Bar -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid var(--border-light); font-size: 0.825rem;">
+                <div id="admin-catalog-page-info" style="color: var(--text-muted);">Showing 1-10 of 12</div>
+                <div id="admin-catalog-pagination-btns" style="display: flex; gap: 6px;"></div>
+              </div>
+
+              <div id="admin-table-empty" style="display: none; text-align: center; padding: 48px 20px;">
+                <p style="font-weight: 700; font-size: 1.05rem; color: var(--text-main); margin-bottom: 6px;">No products match criteria</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Try adjusting your filters or click "Add New Deal" to list a product.</p>
+                <button id="admin-clear-filters-btn" class="btn-secondary" style="font-size: 0.85rem;">Clear Filters</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: RECYCLE BIN / ARCHIVE -->
+          <div id="tab-archive" class="tab-pane" style="display: none;">
+            <div class="table-card">
+              <div class="table-header-toolbar">
+                <div>
+                  <h3 style="font-size: 1.05rem; font-weight: 700;">Soft-Deleted Products (Recycle Bin)</h3>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Archived products are hidden from the store but can be restored anytime.</p>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Platform</th>
+                      <th>Category</th>
+                      <th>Selling Price</th>
+                      <th>Archived Date</th>
+                      <th style="text-align: right;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-archive-tbody"></tbody>
+                </table>
+              </div>
+
+              <div id="admin-archive-empty" style="display: none; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                Recycle Bin is empty. No archived products.
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: CLICK ANALYTICS & LOGS -->
+          <div id="tab-tracking" class="tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h2 style="font-size: 1.2rem; font-weight: 800;">Affiliate Click Tracking Engine</h2>
+                <p style="font-size: 0.825rem; color: var(--text-muted);">Every outbound referral click is captured with session fingerprint and anti-spam rate limiting.</p>
+              </div>
+              <button id="export-clicks-csv-btn" class="btn-secondary" style="font-size: 0.85rem;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>
+                </svg>
+                <span>Export Clicks CSV</span>
+              </button>
+            </div>
+
+            <!-- Disclaimer Notice -->
+            <div class="demo-banner" style="background: #fffbeb; border-color: #fef3c7; color: #92400e;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12" y1="16" y2="16.01"/>
+              </svg>
+              <div>
+                <strong>Attribution Notice:</strong> Outbound clicks represent referral visits to official marketplaces. They are not confirmed sales until reconciled via the Sales & Commission ledger.
+              </div>
+            </div>
+
+            <div class="table-card">
+              <div class="table-header-toolbar">
+                <h3 style="font-size: 1rem; font-weight: 700;">Recorded Outbound Events Log (<span id="clicks-log-count">0</span>)</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="admin-table" style="font-size: 0.825rem;">
+                  <thead>
+                    <tr>
+                      <th>Event ID</th>
+                      <th>Product</th>
+                      <th>Platform</th>
+                      <th>Session ID</th>
+                      <th>Time</th>
+                      <th>Rate Limit</th>
+                    </tr>
+                  </thead>
+                  <tbody id="clicks-table-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: SALES & COMMISSION RECONCILIATION -->
+          <div id="tab-sales" class="tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h2 style="font-size: 1.2rem; font-weight: 800;">Affiliate Sales & Commission Reconciliation</h2>
+                <p style="font-size: 0.825rem; color: var(--text-muted);">Reconcile official affiliate performance reports (Amazon, Flipkart, Myntra) with idempotent import.</p>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button id="import-sales-csv-btn" class="btn-primary" style="font-size: 0.85rem;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>
+                  </svg>
+                  <span>Import Sales CSV</span>
+                </button>
+                <button id="export-sales-csv-btn" class="btn-secondary" style="font-size: 0.85rem;">
+                  <span>Export Ledger CSV</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Ledger Summary Cards -->
+            <div class="stats-grid" style="margin-bottom: 20px;">
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-info">
+                  <h4>Confirmed Commission</h4>
+                  <div class="stat-number" id="sales-confirmed-val" style="font-size: 1.5rem; color: #15803d;">₹0</div>
+                </div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-info">
+                  <h4>Paid Out to Bank</h4>
+                  <div class="stat-number" id="sales-paid-val" style="font-size: 1.5rem; color: #4338ca;">₹0</div>
+                </div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-info">
+                  <h4>Pending Merchant Verification</h4>
+                  <div class="stat-number" id="sales-pending-val" style="font-size: 1.5rem; color: #b45309;">₹0</div>
+                </div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-info">
+                  <h4>Cancelled / Returned Orders</h4>
+                  <div class="stat-number" id="sales-cancelled-val" style="font-size: 1.5rem; color: #b91c1c;">₹0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sales Table -->
+            <div class="table-card">
+              <div class="table-header-toolbar">
+                <h3 style="font-size: 1rem; font-weight: 700;">Verified Commission Transactions (<span id="sales-records-count">0</span>)</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="admin-table" style="font-size: 0.825rem;">
+                  <thead>
+                    <tr>
+                      <th>External Order ID</th>
+                      <th>Product</th>
+                      <th>Platform</th>
+                      <th>Sale Amount</th>
+                      <th>Rate</th>
+                      <th>Commission</th>
+                      <th>Status</th>
+                      <th>Data Source</th>
+                      <th style="text-align: right;">Update Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sales-table-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 6: AUDIT TRAIL LOGS -->
+          <div id="tab-audit" class="tab-pane" style="display: none;">
+            <div style="margin-bottom: 16px;">
+              <h2 style="font-size: 1.2rem; font-weight: 800;">Append-Only Admin Audit Log</h2>
+              <p style="font-size: 0.825rem; color: var(--text-muted);">Immutable audit trail tracking all administrative creations, edits, archives, settings updates, and imports.</p>
+            </div>
+
+            <div class="table-card">
+              <div class="table-header-toolbar">
+                <h3 style="font-size: 1rem; font-weight: 700;">System Audit Events (<span id="audit-log-count">0</span>)</h3>
+                <button id="export-audit-csv-btn" class="btn-secondary" style="font-size: 0.8rem;">Export Audit Log</button>
+              </div>
+              <div class="table-responsive">
+                <table class="admin-table" style="font-size: 0.825rem;">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Actor</th>
+                      <th>Action</th>
+                      <th>Target</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody id="audit-table-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 7: SETTINGS & BACKUP -->
+          <div id="tab-settings" class="tab-pane" style="display: none;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 24px;" class="form-row-2">
+              <!-- General Settings -->
+              <div style="background: white; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">Website Display & Branding</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Configure title, currency symbol, and announcement bar.</p>
+
+                <form id="store-settings-form">
+                  <div class="form-group">
+                    <label class="form-label" for="setting-store-name">Website Name <span class="required">*</span></label>
+                    <input type="text" id="setting-store-name" class="form-control" required />
+                  </div>
+
+                  <div class="form-row form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="setting-currency">Currency Symbol</label>
+                      <input type="text" id="setting-currency" class="form-control" placeholder="₹" maxlength="4" />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="setting-contact-email">Support Contact Email</label>
+                      <input type="email" id="setting-contact-email" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="setting-store-tagline">Store Tagline / Subtitle</label>
+                    <input type="text" id="setting-store-tagline" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-checkbox-label" for="setting-announcement-enabled">
+                      <input type="checkbox" id="setting-announcement-enabled" style="width: 18px; height: 18px;" />
+                      <span>Enable Top Announcement Bar</span>
+                    </label>
+                  </div>
+
+                  <div class="form-group" id="announcement-text-group">
+                    <label class="form-label" for="setting-announcement-text">Announcement Bar Text</label>
+                    <input type="text" id="setting-announcement-text" class="form-control" />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="setting-disclosure-text">Affiliate Disclosure Statement</label>
+                    <textarea id="setting-disclosure-text" class="form-control" rows="3"></textarea>
+                  </div>
+
+                  <!-- FESTIVAL, BANNER & DISCOUNT OFFER CONTROLS -->
+                  <div style="border-top: 2px dashed #e2e8f0; padding-top: 20px; margin-top: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                      <h4 style="font-size: 1.05rem; font-weight: 800; color: #b45309; display: flex; align-items: center; gap: 8px;">
+                        <span>🎉</span>
+                        <span>त्योहार, बैनर और डिस्काउंट ऑफर सेटिंग्स</span>
+                      </h4>
+                      <span class="badge-soft badge-soft-confirmed" style="background: #fef3c7; color: #b45309; font-weight: 800;">LIVE PREVIEW</span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
+                      एडमिन से ही ग्राहक वेबसाइट का मुख्य बैनर, त्योहार/इवेंट का नाम (उदा: महा सेल, दिवाली), स्पेशल डिस्काउंट ऑफर और थीम बदलें।
+                    </p>
+
+                    <!-- Live Banner Preview Inside Admin -->
+                    <div style="margin-bottom: 20px;">
+                      <label class="form-label" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">लाइव बैनर प्रीव्यू (Live Banner Preview):</label>
+                      <div id="admin-banner-preview" class="hero-banner theme-diwali-gold" style="padding: 24px 20px; border-radius: var(--radius-lg); transition: all 0.3s ease;">
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                          <span>✨</span>
+                          <span id="preview-festival-name">महा सेल (Maha Sale)</span>
+                        </div>
+                        <h4 id="preview-banner-title" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; color: white; line-height: 1.3;">त्योहार महा सेल: अमेज़न, फ्लिपकार्ट और मीशो के बेस्ट ऑफर्स!</h4>
+                        <p id="preview-banner-subtitle" style="font-size: 0.825rem; opacity: 0.95; margin-bottom: 14px; color: white; max-width: 650px; line-height: 1.4;">भारत के सबसे बड़े शॉपिंग प्लेटफॉर्म्स से चुनिंदा डिस्काउंट और कूपन डील्स। सीधे ओरिजिनल स्टोर से खरीदें।</p>
+                        <div id="preview-offer-callout" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); backdrop-filter: blur(6px); padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.35);">
+                          <span>🎁</span>
+                          <span id="preview-discount-text">💥 सभी कैटेगरीज पर 80% तक की महा छूट + एक्स्ट्रा बैंक ऑफर्स!</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-checkbox-label" for="setting-banner-enabled">
+                        <input type="checkbox" id="setting-banner-enabled" style="width: 18px; height: 18px;" />
+                        <span style="font-weight: 700; color: var(--text-main);">वेबसाइट पर प्रमोशनल बैनर दिखाएं (Enable Website Hero Banner)</span>
+                      </label>
+                    </div>
+
+                    <div id="banner-controls-group">
+                      <div class="form-row form-row-2">
+                        <div class="form-group">
+                          <label class="form-label" for="setting-festival-name">
+                            त्योहार / इवेंट का नाम (Festival Name) <span class="required">*</span>
+                          </label>
+                          <input type="text" id="setting-festival-name" class="form-control" placeholder="उदा: महा सेल (Maha Sale) या दिवाली स्पेशल" />
+                          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">बैनर के ऊपर शाइनिंग बैज में दिखता है (जैसे: दिवाली स्पेशल, महा सेल, होली ऑफर)</div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="form-label" for="setting-banner-theme">
+                            बैनर कलर थीम (Banner Visual Theme)
+                          </label>
+                          <select id="setting-banner-theme" class="form-control">
+                            <option value="diwali-gold">✨ दिवाली गोल्ड (Diwali Festive Gold & Amber)</option>
+                            <option value="maha-sale-red">🔥 महा सेल रेड (Mega Sale Crimson Red)</option>
+                            <option value="royal-blue">💎 रॉयल ब्लू (Royal Blue & Indigo Classic)</option>
+                            <option value="holi-vibrant">🎨 होली वाइब्रेंट (Holi Multi-Color Gradient)</option>
+                            <option value="navratri-orange">🪔 नवरात्रि / फेस्टिव ऑरेंज (Festive Orange)</option>
+                            <option value="custom-image">🖼️ कस्टम इमेज बैकग्राउंड (Custom Banner Image URL)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group" id="custom-banner-image-group" style="display: none;">
+                        <label class="form-label" for="setting-custom-banner-image-url">कस्टम बैनर इमेज URL (Custom Banner Image URL)</label>
+                        <input type="url" id="setting-custom-banner-image-url" class="form-control" placeholder="https://images.unsplash.com/photo-..." />
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">यदि आप अपनी कस्टम बैकग्राउंड फोटो लगाना चाहते हैं तो यहाँ डायरेक्ट इमेज URL पेस्ट करें</div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="setting-banner-title">
+                          बैनर मुख्य शीर्षक (Banner Main Heading) <span class="required">*</span>
+                        </label>
+                        <input type="text" id="setting-banner-title" class="form-control" placeholder="उदा: त्योहार महा सेल: अमेज़न, फ्लिपकार्ट और मीशो के बेस्ट ऑफर्स!" />
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="setting-banner-subtitle">
+                          बैनर विवरण / सबटाइटल (Banner Subtitle Description)
+                        </label>
+                        <textarea id="setting-banner-subtitle" class="form-control" rows="2" placeholder="उदा: भारत के सबसे बड़े शॉपिंग प्लेटफॉर्म्स से चुनिंदा डिस्काउंट और कूपन डील्स..."></textarea>
+                      </div>
+
+                      <!-- Special Discount Offer Callout -->
+                      <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-top: 14px;">
+                        <div class="form-group" style="margin-bottom: 10px;">
+                          <label class="form-checkbox-label" for="setting-discount-offer-enabled">
+                            <input type="checkbox" id="setting-discount-offer-enabled" style="width: 18px; height: 18px;" />
+                            <span style="font-weight: 700; color: #b45309;">💥 विशेष डिस्काउंट ऑफर कॉलआउट दिखाएं (Show Discount Offer Box)</span>
+                          </label>
+                        </div>
+
+                        <div class="form-group" id="discount-offer-text-group" style="margin-bottom: 0;">
+                          <label class="form-label" for="setting-discount-offer-text">डिस्काउंट ऑफर टेक्स्ट (Discount Offer Text)</label>
+                          <input type="text" id="setting-discount-offer-text" class="form-control" placeholder="उदा: 💥 सभी कैटेगरीज पर 80% तक की महा छूट + एक्स्ट्रा बैंक ऑफर्स!" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn-primary" style="margin-top: 20px; width: 100%; justify-content: center; padding: 12px; font-size: 0.95rem;">
+                    <span>💾 सभी सेटिंग्स, बैनर व ऑफर सुरक्षित करें (Save Store & Banner Settings)</span>
+                  </button>
+                </form>
+              </div>
+
+              <!-- Security & Backup Operations -->
+              <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Security Credentials -->
+                <div style="background: white; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0;">Firebase Authentication Security</h3>
+                    <span class="badge-soft badge-soft-confirmed">Active</span>
+                  </div>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Protected by Google Firebase Auth. Only authorized administrator can manage this platform.</p>
+
+                  <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 16px;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2px;">Authorized Admin Account:</div>
+                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--primary); font-family: monospace;">anilkumarjiha123@gmail.com</div>
+                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;">Provider: Firebase Auth (Project: kunal-a9793)</div>
+                  </div>
+
+                  <form id="admin-password-form">
+                    <div class="form-group">
+                      <label class="form-label" for="auth-new-pass">New Firebase Password (Min 6 chars) <span class="required">*</span></label>
+                      <input type="password" id="auth-new-pass" class="form-control" minlength="6" placeholder="Enter new strong password" required />
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="font-weight: 700;">Update Firebase Password</button>
+                  </form>
+                </div>
+
+                <!-- Database Backup & Restore -->
+                <div style="background: white; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+                  <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">Database Backup & Disaster Recovery</h3>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Export full JSON snapshot or restore database state.</p>
+
+                  <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                      <div style="font-weight: 700; font-size: 0.85rem; color: #166534; display: flex; align-items: center; gap: 6px;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></span>
+                        Firebase Cloud Connected: <strong>kunal-a9793</strong>
+                      </div>
+                      <div style="font-size: 0.72rem; color: #15803d; margin-top: 2px;">Cloud Firestore & Authentication Active</div>
+                    </div>
+                    <button type="button" id="force-firebase-sync-btn" class="btn-primary" style="font-size: 0.75rem; padding: 6px 10px; background: #16a34a;">
+                      Push All to Firestore
+                    </button>
+                  </div>
+
+                  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="download-backup-json-btn" class="btn-primary" style="font-size: 0.825rem;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>
+                      </svg>
+                      <span>Download JSON Backup</span>
+                    </button>
+
+                    <label class="btn-secondary" style="font-size: 0.825rem; cursor: pointer;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/>
+                      </svg>
+                      <span>Restore from JSON</span>
+                      <input type="file" id="restore-json-file-input" accept=".json" style="display: none;" />
+                    </label>
+                  </div>
+
+                  <hr style="border: none; border-top: 1px solid var(--border-light); margin: 18px 0;" />
+
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="admin-reset-demo-btn" class="btn-secondary" style="font-size: 0.775rem;">Reset Demo Data</button>
+                    <button id="admin-clear-samples-btn" class="btn-secondary" style="font-size: 0.775rem; color: #ef4444;">Remove All Demo Items</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ADD / EDIT PRODUCT MODAL DIALOG -->
+    <div id="product-form-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog" style="max-width: 680px;">
+        <div class="modal-header">
+          <h3 class="modal-title" id="product-form-modal-title">Add New Affiliate Product</h3>
+          <button id="product-form-close-btn" class="modal-close-btn" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form id="product-form" novalidate>
+            <input type="hidden" id="prod-id" />
+
+            <div class="form-group">
+              <label class="form-label" for="prod-name">Product Name <span class="required">*</span></label>
+              <input type="text" id="prod-name" class="form-control" placeholder="e.g. Noise ColorFit Pulse 3 Smartwatch" required />
+            </div>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="prod-platform">Affiliate Platform <span class="required">*</span></label>
+                <select id="prod-platform" class="form-control" required>
+                  <option value="Amazon">Amazon</option>
+                  <option value="Flipkart">Flipkart</option>
+                  <option value="Meesho">Meesho</option>
+                  <option value="Myntra">Myntra</option>
+                  <option value="Other">Other Platform</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prod-category">Product Category <span class="required">*</span></label>
+                <select id="prod-category" class="form-control" required>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Home">Home</option>
+                  <option value="Beauty">Beauty</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="prod-selling-price">Selling Price (<span class="currency-label">₹</span>) <span class="required">*</span></label>
+                <input type="number" id="prod-selling-price" class="form-control" placeholder="999" min="1" step="any" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prod-original-price">Original Price / MRP (<span class="currency-label">₹</span>) <span style="font-weight: 400; color: var(--text-muted);">(Optional)</span></label>
+                <input type="number" id="prod-original-price" class="form-control" placeholder="2499" min="1" step="any" />
+                <div id="prod-discount-preview" style="font-size: 0.75rem; color: #10b981; font-weight: 700; margin-top: 4px;"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prod-image-url">Product Image URL <span class="required">*</span></label>
+              <div style="display: flex; gap: 10px;">
+                <input type="url" id="prod-image-url" class="form-control" placeholder="https://images.unsplash.com/photo-..." required style="flex: 1;" />
+                <button type="button" id="preview-image-trigger" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 12px;">Test Image</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px;">
+                <div class="image-preview-box">
+                  <img id="form-img-preview" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Preview" />
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                  Paste a direct link to an authorized image or product photo.<br/>
+                  <span style="color: var(--primary); cursor: pointer;" id="preset-image-suggest">Click to insert sample photo</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prod-affiliate-url">Affiliate Destination URL <span class="required">*</span></label>
+              <input type="url" id="prod-affiliate-url" class="form-control" placeholder="https://www.amazon.in/dp/...?tag=yourtag-21" required />
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+                ⚠️ Must be a valid URL starting with http:// or https://. Clicking "Buy Now" will direct here.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prod-desc">Product Description <span class="required">*</span></label>
+              <textarea id="prod-desc" class="form-control" rows="3" placeholder="Key specs, features, colors, warranty information..." required></textarea>
+            </div>
+
+            <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 20px;">
+              <div class="form-row form-row-2" style="margin-bottom: 10px;">
+                <div>
+                  <label class="form-checkbox-label" for="prod-is-pinned">
+                    <input type="checkbox" id="prod-is-pinned" style="width: 18px; height: 18px;" />
+                    <span style="font-weight: 700; color: #b45309;">📌 Pin to Top (सबसे ऊपर पिन करें)</span>
+                  </label>
+                  <div style="font-size: 0.72rem; color: #92400e; margin-left: 26px; font-weight: 600;">
+                    यह प्रोडक्ट वेबसाइट कैटलॉग में सबसे ऊपर (Top #1) रहेगा।
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-checkbox-label" for="prod-is-featured">
+                    <input type="checkbox" id="prod-is-featured" style="width: 18px; height: 18px;" />
+                    <span>Mark as Featured Deal</span>
+                  </label>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-left: 26px;">
+                    होमपेज के फीचर्ड डील्स सेक्शन में दिखाएं
+                  </div>
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid var(--border-light); padding-top: 10px;">
+                <label class="form-label" for="prod-status" style="margin-bottom: 4px;">Display Status</label>
+                <select id="prod-status" class="form-control" style="font-size: 0.85rem; padding: 6px 10px;">
+                  <option value="active">Active (Visible on website)</option>
+                  <option value="hidden">Hidden (Draft / Archive)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" id="product-form-cancel-btn" class="btn-secondary">Cancel</button>
+              <button type="submit" id="product-form-submit-btn" class="btn-primary">Save Product</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORT SALES CSV MODAL -->
+    <div id="import-sales-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog" style="max-width: 600px;">
+        <div class="modal-header">
+          <h3 class="modal-title">Import Verified Affiliate Sales CSV</h3>
+          <button id="import-sales-close-btn" class="modal-close-btn" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+            Paste your raw CSV report from Amazon Associates, Flipkart Affiliate, or upload a CSV file. Duplicate order IDs are automatically skipped (Idempotency).
+          </p>
+          <div class="form-group">
+            <label class="form-label">Upload CSV File:</label>
+            <input type="file" id="sales-csv-file-input" accept=".csv" class="form-control" style="font-size: 0.85rem;" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Or Paste CSV Content:</label>
+            <textarea id="sales-csv-text-input" class="form-control" rows="6" placeholder="OrderId,Platform,ProductName,Amount,Rate,Commission,Status&#10;AMZ-401,Amazon,Noise Pulse,1499,9,134.91,Confirmed&#10;FK-902,Flipkart,boAt Earbuds,999,8,79.92,Paid"></textarea>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button id="import-sales-cancel-btn" class="btn-secondary">Cancel</button>
+            <button id="import-sales-submit-btn" class="btn-primary">Process Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirm-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog" style="max-width: 440px;">
+        <div class="modal-header">
+          <h3 class="modal-title" id="confirm-modal-title">Confirm Action</h3>
+          <button id="confirm-modal-close" class="modal-close-btn" aria-label="Close dialog">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-modal-message" style="font-size: 0.95rem; color: var(--text-body); margin-bottom: 20px; line-height: 1.5;"></p>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button id="confirm-cancel-btn" class="btn-secondary">Cancel</button>
+            <button id="confirm-ok-btn" class="btn-primary" style="background: #ef4444;">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>

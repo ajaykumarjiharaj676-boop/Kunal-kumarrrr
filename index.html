@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AffiliateMart - Multi-Affiliate Shopping Portal</title>
+    <meta name="description" content="Modern multi-affiliate shopping catalog and deal aggregator featuring Amazon, Flipkart, Meesho, and Myntra with a comprehensive admin dashboard." />
+    <meta property="og:title" content="AffiliateMart - Multi-Affiliate Shopping Portal" />
+    <meta property="og:description" content="Modern multi-affiliate shopping catalog and deal aggregator featuring Amazon, Flipkart, Meesho, and Myntra with a comprehensive admin dashboard." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- PWA & Mobile Web App Meta Tags -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AffilMart" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png" />
+
+    <!-- Google Fonts for crisp modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Announcement Bar -->
+    <div id="announcement-bar" class="announcement-bar">
+      <span class="pulse-dot"></span>
+      <span id="announcement-text">🔥 Mega Deals Alert: Hand-picked best discounts across Amazon, Flipkart, Meesho & Myntra!</span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-main">
+          <!-- Logo -->
+          <a href="./index.html" class="brand-logo" id="header-brand-logo">
+            <div class="brand-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+            </div>
+            <span id="brand-name-display">Affiliate<span class="accent">Mart</span></span>
+          </a>
+
+          <!-- Live Search Bar -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <span class="search-icon-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+              </span>
+              <input 
+                type="text" 
+                id="search-input" 
+                class="search-input" 
+                placeholder="Search deals on Amazon, Flipkart, Meesho..." 
+                autocomplete="off"
+              />
+              <button id="search-clear" class="search-clear-btn" title="Clear search" aria-label="Clear search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Header Right Actions -->
+          <div class="header-actions">
+            <!-- PWA Install Button (Header) -->
+            <button id="header-pwa-install-btn" class="header-btn pwa-header-btn" title="Install App on Phone / Desktop" style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                <path d="M12 18h.01"/>
+                <path d="m9 11 3 3 3-3"/>
+                <path d="M12 7v7"/>
+              </svg>
+              <span>Install App</span>
+            </button>
+
+            <!-- Wishlist Button -->
+            <button id="wishlist-toggle-btn" class="header-btn" title="Saved Deals">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+              <span class="d-none-sm">Saved</span>
+              <span id="wishlist-badge" class="badge-counter" style="display: none;">0</span>
+            </button>
+
+            <!-- Admin Portal Link -->
+            <a href="./admin.html" class="header-btn admin-link" title="Open Admin Dashboard">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span>Admin</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills Bar -->
+      <nav class="category-nav-bar" aria-label="Product categories">
+        <div class="container">
+          <div class="category-nav-inner" id="category-pills-container">
+            <button class="category-chip active" data-category="All">
+              <span>All Deals</span>
+            </button>
+            <button class="category-chip" data-category="Electronics">
+              <span>📱 Electronics</span>
+            </button>
+            <button class="category-chip" data-category="Fashion">
+              <span>👗 Fashion</span>
+            </button>
+            <button class="category-chip" data-category="Home">
+              <span>🏠 Home & Kitchen</span>
+            </button>
+            <button class="category-chip" data-category="Beauty">
+              <span>💄 Beauty & Personal</span>
+            </button>
+            <button class="category-chip" data-category="Accessories">
+              <span>🕶️ Accessories</span>
+            </button>
+            <button class="category-chip" data-category="Other">
+              <span>📦 Other</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container">
+      <!-- Hero Promotional Banner -->
+      <section class="hero-section" id="hero-banner-section">
+        <div class="hero-banner theme-diwali-gold" id="hero-banner-element">
+          <div class="hero-content">
+            <div class="hero-tag" id="hero-campaign-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <span id="hero-festival-name">महा सेल (Maha Sale)</span>
+            </div>
+            <h1 class="hero-title" id="hero-store-title">Discover Top Deals Across India's Best Platforms</h1>
+            <p class="hero-subtitle" id="hero-store-subtitle">Compare trending deals on Amazon, Flipkart, Meesho, and Myntra in one single place. Buy directly from official stores with verified discounts.</p>
+            
+            <!-- Festive Offer Callout Box -->
+            <div id="hero-offer-callout" class="hero-offer-box" style="display: none;">
+              <span>🎁</span>
+              <span id="hero-discount-offer-text">सभी कैटेगरीज पर 80% तक की महा छूट + एक्स्ट्रा बैंक ऑफर्स!</span>
+            </div>
+
+            <div class="hero-platforms-bar">
+              <span>Verified Partner Platforms:</span>
+              <span class="hero-platform-pill">Amazon</span>
+              <span class="hero-platform-pill">Flipkart</span>
+              <span class="hero-platform-pill">Meesho</span>
+              <span class="hero-platform-pill">Myntra</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter & Sort Toolbar -->
+      <section class="filter-toolbar" aria-label="Filters and sorting">
+        <!-- Platform Tabs -->
+        <div class="platform-filters" id="platform-filters-container">
+          <button class="filter-btn active" data-platform="All">All Platforms</button>
+          <button class="filter-btn" data-platform="Amazon">Amazon</button>
+          <button class="filter-btn" data-platform="Flipkart">Flipkart</button>
+          <button class="filter-btn" data-platform="Meesho">Meesho</button>
+          <button class="filter-btn" data-platform="Myntra">Myntra</button>
+          <button class="filter-btn" data-platform="Other">Other</button>
+        </div>
+
+        <!-- Sort Select & Results Count -->
+        <div class="sort-and-meta">
+          <label for="sort-select" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sort By:</label>
+          <select id="sort-select" class="sort-select">
+            <option value="featured">Featured / Top Picks</option>
+            <option value="discount">Biggest Discount %</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest Arrivals</option>
+          </select>
+          <span id="results-count" class="results-count-text">Showing 0 deals</span>
+        </div>
+      </section>
+
+      <!-- Active Filters Tag Bar (shown when searching or filtering) -->
+      <div id="active-filters-bar" style="display: none; margin-bottom: 20px; align-items: center; gap: 8px; font-size: 0.85rem;">
+        <span style="color: var(--text-muted);">Active filter:</span>
+        <span id="active-filter-label" style="font-weight: 700; color: var(--primary);"></span>
+        <button id="clear-all-filters-btn" class="btn-secondary" style="padding: 3px 10px; font-size: 0.75rem;">Clear All</button>
+      </div>
+
+      <!-- Featured Section (Only shown when not specifically searching) -->
+      <section id="featured-section" class="featured-deals-wrapper" style="margin-bottom: 32px;">
+        <div class="section-header">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            Featured Hand-Picked Deals
+          </h2>
+          <span class="section-subtitle">Curated high-discount picks</span>
+        </div>
+        <div class="product-grid" id="featured-products-grid">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- All Deals / Catalog Section -->
+      <section id="catalog-section">
+        <div class="section-header">
+          <h2 class="section-title" id="catalog-title">All Products & Deals</h2>
+          <span class="section-subtitle" id="catalog-subtitle">Click Buy Now to open official store product link</span>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div class="product-grid" id="main-products-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Pagination Controls -->
+        <div id="customer-pagination" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin: 24px 0 36px;"></div>
+
+        <!-- Empty State Container -->
+        <div id="empty-state-box" class="state-box" style="display: none;">
+          <div class="state-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m9 9 4 4"/><path d="m13 9-4 4"/>
+            </svg>
+          </div>
+          <h3 class="state-title">No products found</h3>
+          <p class="state-desc" id="empty-state-message">No deals match your current search or filter criteria. Try resetting filters or searching for something else.</p>
+          <button id="reset-filter-action" class="btn-primary">Reset Filters</button>
+        </div>
+      </section>
+
+      <!-- Transparent Affiliate Disclosure Bar -->
+      <section class="disclosure-bar">
+        <div class="disclosure-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Affiliate Transparency Notice:</strong> <span id="affiliate-disclosure-snippet">This website contains affiliate links. When you click "Buy Now", you are safely redirected to the authorized merchant platform (e.g. Amazon, Flipkart, Meesho, Myntra) where your purchase and payment are completed. We may earn a small referral commission at no additional cost to you.</span>
+          <button id="open-full-disclosure-btn" style="color: var(--primary); text-decoration: underline; font-weight: 600; margin-left: 6px;">Read full disclosure</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand-title" id="footer-brand-title">AffiliateMart</div>
+            <p class="footer-desc" id="footer-brand-desc">
+              Your one-stop smart shopping deal aggregator. We track, compare, and organize hand-picked discounts and coupon opportunities across major online shopping marketplaces in India.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Popular Categories</h4>
+            <ul class="footer-links">
+              <li><a href="#" class="footer-cat-link" data-cat="Electronics">Electronics & Gadgets</a></li>
+              <li><a href="#" class="footer-cat-link" data-cat="Fashion">Fashion & Apparel</a></li>
+              <li><a href="#" class="footer-cat-link" data-cat="Home">Home & Kitchen</a></li>
+              <li><a href="#" class="footer-cat-link" data-cat="Beauty">Beauty & Grooming</a></li>
+              <li><a href="#" class="footer-cat-link" data-cat="Accessories">Watches & Accessories</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Company & Legal</h4>
+            <ul class="footer-links">
+              <li><button class="footer-info-btn" data-modal="about">About Us</button></li>
+              <li><button class="footer-info-btn" data-modal="contact">Contact Support</button></li>
+              <li><button class="footer-info-btn" data-modal="privacy">Privacy Policy</button></li>
+              <li><button class="footer-info-btn" data-modal="terms">Terms of Service</button></li>
+              <li><button class="footer-info-btn" data-modal="disclosure">Affiliate Disclosure</button></li>
+              <li><a href="./admin.html" style="color: #60a5fa; font-weight: 600;">Admin Dashboard</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© <span id="current-year">2026</span> <span id="footer-copy-brand">AffiliateMart</span>. All merchant logos & trademarks belong to their respective owners.</p>
+          <p>Product prices & availability are subject to change on the merchant platform.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav" aria-label="Mobile Navigation">
+      <a href="#hero-banner-section" class="bottom-nav-item active" id="bnav-home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </a>
+      <a href="#category-pills-container" class="bottom-nav-item" id="bnav-categories">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+        </svg>
+        <span>Categories</span>
+      </a>
+      <button class="bottom-nav-item" id="bnav-wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+        </svg>
+        <span>Saved</span>
+        <span id="bnav-wishlist-badge" class="bottom-nav-badge" style="display: none;">0</span>
+      </button>
+      <button class="bottom-nav-item" id="bnav-install">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+          <path d="M12 18h.01"/>
+          <path d="m9 11 3 3 3-3"/>
+          <path d="M12 7v7"/>
+        </svg>
+        <span>Install</span>
+      </button>
+      <a href="./admin.html" class="bottom-nav-item" id="bnav-admin">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Admin</span>
+      </a>
+    </nav>
+
+    <!-- Product Quick View Modal -->
+    <div id="quickview-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">Product Details</h3>
+          <button id="quickview-close-btn" class="modal-close-btn" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body" id="quickview-modal-content">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Wishlist / Saved Deals Drawer / Modal -->
+    <div id="wishlist-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">Your Saved Deals</h3>
+          <button id="wishlist-close-btn" class="modal-close-btn" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="wishlist-items-container">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Information / Legal Modals (About, Contact, Privacy, Terms, Disclosure) -->
+    <div id="info-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" id="info-modal-title">Information</h3>
+          <button id="info-modal-close-btn" class="modal-close-btn" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body" id="info-modal-content" style="line-height: 1.7; color: var(--text-body); font-size: 0.925rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PWA Install Banner (Automatic Bottom Sheet / Card on Mobile & Desktop) -->
+    <aside id="pwa-install-banner" class="pwa-banner" aria-label="Install App" style="display: none;">
+      <div class="pwa-banner-card">
+        <button id="pwa-banner-close-btn" class="pwa-close-btn" aria-label="Dismiss banner" title="बाद में">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+
+        <div class="pwa-banner-header">
+          <div class="pwa-banner-icon">
+            <img src="./icons/icon-192x192.png" alt="AffiliateMart App" width="48" height="48" onerror="this.src='./icons/icon.svg'" />
+          </div>
+          <div class="pwa-banner-info">
+            <div class="pwa-banner-title">
+              <strong>AffiliateMart</strong>
+              <span class="pwa-verified-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Official App
+              </span>
+            </div>
+            <p class="pwa-banner-desc">
+              अपने फोन की होम स्क्रीन पर ऐप इंस्टॉल करें! 1-क्लिक में सबसे ताज़ा डिस्काउंट और महा सेल डील्स पाएँ।
+            </p>
+          </div>
+        </div>
+
+        <div class="pwa-banner-features">
+          <span class="pwa-feat-item">⚡ Instant Fast</span>
+          <span class="pwa-feat-item">📦 No Storage Used</span>
+          <span class="pwa-feat-item">📴 Offline Ready</span>
+        </div>
+
+        <div class="pwa-banner-actions">
+          <button id="pwa-install-action-btn" class="pwa-btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+              <path d="M12 18h.01"/>
+              <path d="m9 11 3 3 3-3"/>
+              <path d="M12 7v7"/>
+            </svg>
+            <span>अभी इंस्टॉल करें (Install App)</span>
+          </button>
+          <button id="pwa-dismiss-btn" class="pwa-btn-secondary">बाद में (Later)</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- iOS Safari "Add to Home Screen" Instructions Modal -->
+    <div id="pwa-ios-modal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-dialog" style="max-width: 440px;">
+        <div class="modal-header">
+          <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>📲 Install on iPhone / iPad</span>
+          </h3>
+          <button id="pwa-ios-close-btn" class="modal-close-btn" aria-label="Close modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body" style="padding: 20px 24px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+            <img src="./icons/icon-192x192.png" alt="AffiliateMart" style="width: 52px; height: 52px; border-radius: 12px; box-shadow: var(--shadow-sm);" />
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);">AffiliateMart</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Safari ब्राउज़र में 1 आसान स्टेप में जोड़ें</div>
+            </div>
+          </div>
+
+          <ol style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.9rem; color: var(--text-main); display: flex; flex-direction: column; gap: 12px;">
+            <li>
+              Safari के नीचे टूलबार में <strong>Share (शेयर)</strong> बटन
+              <span style="display: inline-flex; align-items: center; vertical-align: middle; background: #e2e8f0; border-radius: 6px; padding: 2px 6px; font-weight: 700; margin: 0 4px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              </span>
+              पर टैप करें।
+            </li>
+            <li>
+              नीचे स्क्रॉल करें और <strong>"Add to Home Screen" (होम स्क्रीन में जोड़ें)</strong>
+              <span style="display: inline-flex; align-items: center; vertical-align: middle; background: #e2e8f0; border-radius: 6px; padding: 2px 6px; font-weight: 700; margin: 0 4px;">➕</span>
+              चुनें।
+            </li>
+            <li>
+              ऊपर दाएँ कोने में <strong>"Add"</strong> पर टैप करें।
+            </li>
+          </ol>
+
+          <div style="margin-top: 20px; padding: 12px; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe; font-size: 0.825rem; color: #1e40af;">
+            ✨ इसके बाद AffiliateMart आपके फोन की होम स्क्रीन पर एक असली ऐप की तरह बिना ब्राउज़र बार के खुलेगा!
+          </div>
+
+          <button id="pwa-ios-understood-btn" class="btn-primary" style="width: 100%; margin-top: 18px; padding: 10px; font-size: 0.9rem;">
+            समझ गया (Got it)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offline Connectivity Toast Notification -->
+    <div id="offline-toast" class="offline-toast" style="display: none;" role="status">
+      <span class="offline-pulse-dot"></span>
+      <span>📶 ऑफलाइन मोड सक्रिय: आप इंटरनेट के बिना भी कैश्ड प्रोडक्ट्स और सेव किए गए डील्स देख सकते हैं।</span>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

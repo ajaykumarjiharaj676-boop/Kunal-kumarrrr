@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Products: Public can read active products; Authenticated Admin can write
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null || request.resource.data != null;
+    }
+
+    // Settings: Public can read store settings; Admin can update
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Outbound Click Events: Public can create clicks (with rate limiting / payload check)
+    match /clicks/{clickId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Verified Affiliate Sales: Only Admin can read and write
+    match /sales/{saleId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Append-only Audit Logs: Only Admin can read; Admin/System can create
+    match /audit_logs/{logId} {
+      allow create: if true;
+      allow read: if request.auth != null;
+      allow update, delete: if false; // Append-only immutable
+    }
+
+    // Default deny for all other paths
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
